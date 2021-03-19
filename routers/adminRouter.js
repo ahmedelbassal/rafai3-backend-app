@@ -67,5 +67,36 @@ adminRouter.post('/login',async(req,res)=>{
 
 
 
+
+// get admin details
+adminRouter.get('',async(req,res)=>{
+
+    try{
+
+        // get admin details by id got from authorization
+        const adminId=req.adminId;
+
+        if(req.adminId==null) throw Error('Authentication failed')
+
+        // find admin data in data base
+        const adminDetails=await adminModel.findOne({_id:adminId}).exec();
+
+        res.statusCode=200;
+
+        res.json(adminDetails)
+
+
+    }catch(err){
+
+        res.statusCode=500;
+        errorHandler(err,req,res)
+    }
+
+})
+
+
+
+
+
 // export adminRouter to be used in app file
 module.exports = adminRouter;
