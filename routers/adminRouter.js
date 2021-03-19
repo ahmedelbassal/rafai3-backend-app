@@ -79,7 +79,7 @@ adminRouter.get('',async(req,res)=>{
         if(req.adminId==null) throw Error('Authentication failed')
 
         // find admin data in data base
-        const adminDetails=await adminModel.findOne({_id:adminId}).exec();
+        const adminDetails=await adminModel.findOne({_id:adminId},{password:0}).exec();
 
         res.statusCode=200;
 
