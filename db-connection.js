@@ -6,7 +6,7 @@ const mongoose = require("mongoose")
 const localhost='mongodb://localhost/e_commerce';
 
 // for atlas link      mongodb+srv://sarah:<password>@cluster0.9riej.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-mongoose.connect('mongodb+srv://rafia3:rafia3123@cluster0.9riej.mongodb.net/ecommerce?retryWrites=true&w=majority', {
+mongoose.connect(process.env.MONGODB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true,

@@ -32,10 +32,10 @@ function errorHandler(err, req, res) {
 //     // if (authorization == '') {
 //         //     res.status(401).json({ error: "authentication failed" })
 //         // }
-//         // verify token by secret 'verySecret' created with token when user logged in
+//         // verify token by secret process.env.hushh created with token when user logged in
         
         
-//         var userTokenSignature =  jwt.verify(req.headers['authorization'], 'verySecret',function(err,tokenSignature){
+//         var userTokenSignature =  jwt.verify(req.headers['authorization'], process.env.hushh,function(err,tokenSignature){
             
 //            // if(err) throw Error('authentication failed');
            
@@ -128,7 +128,7 @@ authneticationRouter.use((req, res, next) => {
             res.status(401).json({ error: "authentication failed" })
         }
         // verify token by secret process.env.hush created with token when user logged in
-        var user = jwt.verify(authorization, 'verySecret', function (err, userTokenSignature) {
+        var user = jwt.verify(authorization, process.env.hushh, function (err, userTokenSignature) {
             
             if (err == { Error: "jwt malformed" }) {
                 // err.message = "user doesn't exist"
@@ -262,8 +262,8 @@ authneticationRouter.use((req, res, next) => {
 //             res.status(401).json({ error: "authentication failed" })
 //         }
 
-//         // verify token by secret 'verySecret' created with token when user logged in
-//         var user = jwt.verify(authorization, 'verySecret', function(err, userTokenSignature) {
+//         // verify token by secret process.env.hushh created with token when user logged in
+//         var user = jwt.verify(authorization, process.env.hushh, function(err, userTokenSignature) {
 
 
 //             if (err == { Error: "jwt malformed" }) {
