@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2; //using cloudinary package to help upload imgs to cloud
 require('dotenv').config();
 
 cloudinary.config({

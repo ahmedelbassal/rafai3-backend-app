@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const Product = require('../models/product');
 const ProductRouter = new express.Router();
 
-const cloudinary = require('../utilities/cloudinary');
-const upload = require('../utilities/multer');
+const cloudinary = require('../utilities/cloudinary'); //importing cloudinary middlewhere to help in image upload
+const upload = require('../utilities/multer'); //importing multer middlewhere to jelp with files
 
-
+//post a new product *image file should be passed yuing key "image" to match the middlewhere
 ProductRouter.post('/', upload, async (req, res) => {
   try {
     const result =  await cloudinary.uploader.upload(req.file.path);
@@ -22,6 +22,7 @@ ProductRouter.post('/', upload, async (req, res) => {
     }
   });
 
+//get all products
   ProductRouter.get('/', async (req, res) => {
     try {
       const products = await Product.find().exec();
@@ -36,6 +37,7 @@ ProductRouter.post('/', upload, async (req, res) => {
     }
   });
   
+//get a specific product using its id
   ProductRouter.get('/:id', async(req, res) =>{
     try {
       const id = req.params.id;
@@ -47,7 +49,8 @@ ProductRouter.post('/', upload, async (req, res) => {
       res.send({message: 'not found'});
     }
   });
-  
+
+//delete a specifc product using its id
   ProductRouter.delete('/:id', async(req, res) =>{
     try {
       const id = req.params.id;
@@ -63,6 +66,7 @@ ProductRouter.post('/', upload, async (req, res) => {
     }
   });
 
+//filter products through categories 
   ProductRouter.get('/filter/:category', async(req, res) =>{
     try {
       const filteredProducts = await Product.find({category : req.params.category});
@@ -75,6 +79,7 @@ ProductRouter.post('/', upload, async (req, res) => {
     }
   });
 
+//update a product feature 
   ProductRouter.patch('/:id', upload ,async(req, res) => {
     try {
       const _id = req.params.id;

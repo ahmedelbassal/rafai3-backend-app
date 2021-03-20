@@ -1,4 +1,4 @@
-const multer = require("multer");
+const multer = require("multer"); //multer package hel with files upload and check its type
 const path = require("path");
 
 module.exports = multer({
