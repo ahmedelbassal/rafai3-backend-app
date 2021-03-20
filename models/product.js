@@ -4,7 +4,7 @@ const schema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
-        minlength: 10,
+        minlength: 5,
         maxlength: 50
     },
     details: {
@@ -24,7 +24,11 @@ const schema = new mongoose.Schema({
     },
     imageUrl: {
         type: String,
+    },
+    cloudinary_id:{
+        type : String,
     }
+    
 
 }, { timestamps: true });
 
