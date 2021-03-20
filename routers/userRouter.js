@@ -244,7 +244,8 @@ userRouter.patch('/changePassword', async(req, res) => {
             res.statusCode = 200;
             res.json({ Success: 'password modified successfully' })
         } else {
-            res.json({ Failed: 'wrong password' })
+            // res.json({ Failed: 'wrong password' })
+            throw Error('old password is invalid');
         }
 
     } catch (err) {
