@@ -80,28 +80,34 @@ ProductRouter.post('/', upload, async (req, res) => {
   });
 
 //update a product feature 
-  ProductRouter.patch('/:id', upload ,async(req, res) => {
-    try {
-      const _id = req.params.id;
-      let product = await Product.findById(_id);
-      await cloudinary.uploader.destroy(product.cloudinary_id);
-      const result = await cloudinary.uploader.upload(req.file.path);
-      const data = {
-        title: req.body.title || product.title,
-        imageUrl: result.secure_url || product.imageUrl,
-        details: req.body.details || product.details,
-        price: req.body.price || product.price,
-        cloudinary_id: result.public_id || product.cloudinary_id,
-      };
-      await Product.updateOne({_id}, data);
-      const editedProduct = await Product.findById(_id);
-      console.log(editedProduct);
-      res.statusCode = 200;
-      res.send({editedProduct: editedProduct});
-    } catch (err) {
-      res.statusCode = 422;
-      res.send({message: 'edit failed'});
+ProductRouter.patch('/:id', upload ,async(req, res) => {
+  try {
+    const _id = req.params.id;
+    let product = await Product.findById(_id);
+    let result;
+    if(!(req.file == null)){
+      const x = await cloudinary.uploader.destroy(product.cloudinary_id);
+      console.log(x);
+      result = await cloudinary.uploader.upload(req.file.path);
+      product.imageUrl = result.secure_url;
+      product.cloudinary_id = result.public_id;
     }
-  });
+    const data = {
+      title: req.body.title || product.title,
+      imageUrl: product.imageUrl,
+      details: req.body.details || product.details,
+      price: req.body.price || product.price,
+      cloudinary_id: product.cloudinary_id,
+    };
+    await Product.updateOne({_id}, data);
+    const editedProduct = await Product.findById(_id);
+    console.log(editedProduct);
+    res.statusCode = 200;
+    res.send({editedProduct: editedProduct});
+  } catch (err) {
+    res.statusCode = 422;
+    res.send({message: 'edit failed'});
+  }
+});
 
   module.exports = ProductRouter;
