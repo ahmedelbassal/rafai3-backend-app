@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 
 // for admin base route
 
-app.use('/*', authenticationRouter);
+//app.use('/*', authenticationRouter);
 
 app.use('/api/user', userRouter);
 
