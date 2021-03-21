@@ -2,6 +2,9 @@
 const express = require('express')
 
 
+const cloudinary = require('../utilities/cloudinary'); //importing cloudinary middlewhere to help in image upload
+const upload = require('../utilities/multer'); //importing multer middlewhere to jelp with files
+
 // module used to hash password
 const bcrypt = require('bcryptjs');
 
@@ -36,7 +39,7 @@ function errorHandler(err, req, res) {
 
 
 // define register api
-userRouter.post('/register', async(req, res) => {
+userRouter.post('/register', async (req, res) => {
 
     try {
 
@@ -77,14 +80,14 @@ userRouter.post('/register', async(req, res) => {
     } catch (err) {
         // return server internal error status
         res.statusCode = 500
-            // res.json({ error: err.message })
+        // res.json({ error: err.message })
         errorHandler(err, req, res)
     }
 })
 
 
 // login user -------------------------------------------
-userRouter.post('/login', async(req, res) => {
+userRouter.post('/login', async (req, res) => {
 
     try {
         // get data from request body
@@ -117,9 +120,9 @@ userRouter.post('/login', async(req, res) => {
         var token = await jwt.sign({ id: user._id }, 'verySecret');
 
         res.statusCode = 200
-            // give user this token in his local storage to be identified every time he go through all
-            // website application so he doesn't need to login every time
-            // then set it to local storage in angular
+        // give user this token in his local storage to be identified every time he go through all
+        // website application so he doesn't need to login every time
+        // then set it to local storage in angular
         res.json({ token })
 
     } catch (err) {
@@ -146,7 +149,7 @@ userRouter.use((req, res, next) => {
         }
 
         // verify token by secret 'verySecret' created with token when user logged in
-        var user = jwt.verify(authorization, 'verySecret', function(err, userTokenSignature) {
+        var user = jwt.verify(authorization, 'verySecret', function (err, userTokenSignature) {
 
 
             if (err == { Error: "jwt malformed" }) {
@@ -186,7 +189,7 @@ userRouter.use((req, res, next) => {
 
 
 // get user details by token returned to user from login
-userRouter.get('/', async(req, res) => {
+userRouter.get('/', async (req, res) => {
 
 
     try {
@@ -210,7 +213,7 @@ userRouter.get('/', async(req, res) => {
 
 
 // this if user want to change his password but first confirm old password
-userRouter.patch('/changePassword', async(req, res) => {
+userRouter.patch('/changePassword', async (req, res) => {
     try {
 
 
@@ -262,7 +265,7 @@ userRouter.patch('/changePassword', async(req, res) => {
 //Also I will make another one that if this user is admin but  will prepare it later
 
 //   delete user by id from paramater only if he has same id in token in authorization
-userRouter.delete('/', async(req, res) => {
+userRouter.delete('/', async (req, res) => {
 
     try {
 
@@ -299,7 +302,7 @@ userRouter.delete('/', async(req, res) => {
 
 // edit user only if id inputted in paramater is same as that id in token in authorization
 // which exists in requrest headers
-userRouter.patch('/update', async(req, res) => {
+userRouter.patch('/update', async (req, res) => {
 
     try {
 
@@ -333,6 +336,23 @@ userRouter.patch('/update', async(req, res) => {
     }
 })
 
+userRouter.patch('/updateImage', upload, (req, res) => {
+    try {
+        let user = await usersModel.findById(req.userId);
+        let result;
+        if (!(req.file == null)) {
+            const x = await cloudinary.uploader.destroy(product.cloudinary_id);
+            console.log(x);
+            result = await cloudinary.uploader.upload(req.file.path);
+            user.imageUrl = result.secure_url;
+            userRouter.cloudinary_id = result.public_id;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+);
 
 // export uterRouter to be used in other files
 module.exports = userRouter;

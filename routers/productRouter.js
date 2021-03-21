@@ -51,7 +51,7 @@ ProductRouter.post('/', upload, async (req, res) => {
   });
 
 //delete a specifc product using its id
-  ProductRouter.delete('/:id', async(req, res) =>{
+  ProductRouter.delete('/:id', async(req, res, next) =>{
     try {
       const id = req.params.id;
       let product = await Product.findById(req.params.id);
@@ -80,8 +80,9 @@ ProductRouter.post('/', upload, async (req, res) => {
   });
 
 //update a product feature 
-ProductRouter.patch('/:id', upload ,async(req, res) => {
+ProductRouter.patch('/:id', upload ,async(req, res, next) => {
   try {
+    if(req.adminId==undefined) throw Error("only admins can accept or reject order");
     const _id = req.params.id;
     let product = await Product.findById(_id);
     let result;
