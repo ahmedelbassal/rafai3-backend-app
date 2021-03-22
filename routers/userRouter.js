@@ -336,7 +336,7 @@ userRouter.patch('/update', async (req, res) => {
     }
 })
 
-userRouter.patch('/updateImage', upload, (req, res) => {
+userRouter.patch('/updateImage', upload, async (req, res) => {
     try {
         let user = await usersModel.findById(req.userId);
         let result;
