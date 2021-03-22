@@ -39,7 +39,7 @@ function errorHandler(err, req, res) {
 
 
 // define register api
-userRouter.post('/register', async (req, res) => {
+userRouter.post('/register', async(req, res) => {
 
     try {
 
@@ -80,14 +80,14 @@ userRouter.post('/register', async (req, res) => {
     } catch (err) {
         // return server internal error status
         res.statusCode = 500
-        // res.json({ error: err.message })
+            // res.json({ error: err.message })
         errorHandler(err, req, res)
     }
 })
 
 
 // login user -------------------------------------------
-userRouter.post('/login', async (req, res) => {
+userRouter.post('/login', async(req, res) => {
 
     try {
         // get data from request body
@@ -120,9 +120,9 @@ userRouter.post('/login', async (req, res) => {
         var token = await jwt.sign({ id: user._id }, 'verySecret');
 
         res.statusCode = 200
-        // give user this token in his local storage to be identified every time he go through all
-        // website application so he doesn't need to login every time
-        // then set it to local storage in angular
+            // give user this token in his local storage to be identified every time he go through all
+            // website application so he doesn't need to login every time
+            // then set it to local storage in angular
         res.json({ token })
 
     } catch (err) {
@@ -149,7 +149,7 @@ userRouter.use((req, res, next) => {
         }
 
         // verify token by secret 'verySecret' created with token when user logged in
-        var user = jwt.verify(authorization, 'verySecret', function (err, userTokenSignature) {
+        var user = jwt.verify(authorization, 'verySecret', function(err, userTokenSignature) {
 
 
             if (err == { Error: "jwt malformed" }) {
@@ -189,14 +189,14 @@ userRouter.use((req, res, next) => {
 
 
 // get user details by token returned to user from login
-userRouter.get('/', async (req, res) => {
+userRouter.get('/', async(req, res) => {
 
 
     try {
 
         // if user exists   / I will return id but without using it only in case user want to delete
         //                      or edit his profile  in angular components
-        const userDetails = await usersModel.findOne({ _id: req.userId }, { password: 0}).exec();
+        const userDetails = await usersModel.findOne({ _id: req.userId }, { password: 0 }).exec();
 
         // return user first name
         res.statusCode = 200
@@ -213,7 +213,7 @@ userRouter.get('/', async (req, res) => {
 
 
 // this if user want to change his password but first confirm old password
-userRouter.patch('/changePassword', async (req, res) => {
+userRouter.patch('/changePassword', async(req, res) => {
     try {
 
 
@@ -265,7 +265,7 @@ userRouter.patch('/changePassword', async (req, res) => {
 //Also I will make another one that if this user is admin but  will prepare it later
 
 //   delete user by id from paramater only if he has same id in token in authorization
-userRouter.delete('/', async (req, res) => {
+userRouter.delete('/', async(req, res) => {
 
     try {
 
@@ -302,7 +302,7 @@ userRouter.delete('/', async (req, res) => {
 
 // edit user only if id inputted in paramater is same as that id in token in authorization
 // which exists in requrest headers
-userRouter.patch('/update', async (req, res) => {
+userRouter.patch('/update', async(req, res) => {
 
     try {
 
@@ -336,24 +336,24 @@ userRouter.patch('/update', async (req, res) => {
     }
 })
 
-userRouter.patch('/updateImage', upload, async (req, res) => {
-    try {
-        let user = await usersModel.findById(req.userId);
-        let result;
+userRouter.patch('/updateImage', upload, async(req, res) => {
+        try {
+            let user = await usersModel.findById({ _id: req.userId });
+            let result;
             const x = await cloudinary.uploader.destroy(user.cloudinary_id);
             console.log(x);
             result = await cloudinary.uploader.upload(req.file.path);
             user.imageUrl = result.secure_url;
             user.cloudinary_id = result.public_id;
 
-        res.statusCode = 200;
-        res.send('updated');
-    } catch (error) {
-        console.log(error);
-        res.statusCode = 422;
-        res.send('not updated');
+            res.statusCode = 200;
+            res.send('updated');
+        } catch (error) {
+            console.log(error);
+            res.statusCode = 422;
+            res.send('not updated');
+        }
     }
-}
 
 );
 
