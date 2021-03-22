@@ -49,9 +49,13 @@ const schema = new mongoose.Schema({
         maxlength: 30,
         unique: true
     },
-    image: {
-        data: Buffer,
-        contentType: String
+    imageUrl: {
+        type: String,
+        default: 'https://res.cloudinary.com/dbhpbylzw/image/upload/v1616370230/user_plqutx.png'
+    },
+    cloudinary_id:{
+        type: String,
+        default:'user_plqutx'
     }
 })
 
