@@ -347,7 +347,7 @@ userRouter.patch('/updateImage', upload, async(req, res) => {
             user.cloudinary_id = result.public_id;
 
             res.statusCode = 200;
-            res.send('updated');
+            res.send(user.imageUrl);
         } catch (error) {
             console.log(error);
             res.statusCode = 422;
