@@ -196,7 +196,7 @@ userRouter.get('/', async (req, res) => {
 
         // if user exists   / I will return id but without using it only in case user want to delete
         //                      or edit his profile  in angular components
-        const userDetails = await usersModel.findOne({ _id: req.userId }, { password: 0, _id: 1, __v: 0 }).exec();
+        const userDetails = await usersModel.findOne({ _id: req.userId }, { password: 0}).exec();
 
         // return user first name
         res.statusCode = 200
@@ -340,15 +340,18 @@ userRouter.patch('/updateImage', upload, async (req, res) => {
     try {
         let user = await usersModel.findById(req.userId);
         let result;
-        if (!(req.file == null)) {
-            const x = await cloudinary.uploader.destroy(product.cloudinary_id);
+            const x = await cloudinary.uploader.destroy(user.cloudinary_id);
             console.log(x);
             result = await cloudinary.uploader.upload(req.file.path);
             user.imageUrl = result.secure_url;
-            userRouter.cloudinary_id = result.public_id;
-        }
+            user.cloudinary_id = result.public_id;
+
+        res.statusCode = 200;
+        res.send('updated');
     } catch (error) {
         console.log(error);
+        res.statusCode = 422;
+        res.send('not updated');
     }
 }
 
